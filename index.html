@@ -35,6 +35,8 @@ background:linear-gradient(90deg,#18f7a0,#39a6ff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 margin-bottom:10px;
+line-height:0.95;
+max-width:65%;
 }
 
 .sub{
@@ -47,12 +49,12 @@ margin-bottom:28px;
 position:absolute;
 top:30px;
 right:30px;
-padding:18px 34px;
+padding:16px 28px;
 border-radius:18px;
 background:linear-gradient(90deg,#4d8dff,#3a73ff);
 color:white;
 text-decoration:none;
-font-size:28px;
+font-size:24px;
 font-weight:700;
 }
 
@@ -72,6 +74,10 @@ outline:none;
 border-radius:16px;
 background:#1e2d55;
 color:#fff;
+}
+
+input[type="date"]{
+color:white;
 }
 
 button{
@@ -182,6 +188,51 @@ text-align:center;
 color:#8da4d7;
 font-size:17px;
 }
+
+@media(max-width:768px){
+
+.wrap{
+padding:20px;
+}
+
+h1{
+font-size:34px;
+max-width:55%;
+line-height:1;
+}
+
+.tgBtn{
+top:20px;
+right:20px;
+padding:12px 20px;
+font-size:16px;
+border-radius:14px;
+}
+
+.sub{
+font-size:16px;
+margin-top:10px;
+margin-bottom:18px;
+}
+
+input,select,button{
+padding:16px;
+font-size:18px;
+}
+
+.big{
+font-size:34px;
+}
+
+.small{
+font-size:18px;
+}
+
+.count{
+font-size:16px;
+}
+
+}
 </style>
 </head>
 
@@ -198,6 +249,7 @@ font-size:17px;
 <div class="grid">
 
 <input id="date" type="date">
+
 <input id="question" placeholder="Валютна пара">
 
 <select id="gemini">
@@ -285,7 +337,6 @@ font-size:17px;
 </div>
 
 <script>
-
 let data = JSON.parse(localStorage.getItem("aiCompareV4") || "[]");
 
 function addRow(){
@@ -302,7 +353,6 @@ real:real.value
 if(!item.date||!item.question||!item.gemini||!item.claude||!item.gpt||!item.real)return;
 
 data.push(item);
-
 save();
 render();
 
@@ -313,47 +363,46 @@ gpt.value="";
 real.value="";
 }
 
-function cls(v,real){
+function cls(v,r){
 if(v=="ПРОПУСТИТИ") return "skip";
-if(v==real) return "ok";
+if(v==r) return "ok";
 return "bad";
 }
 
 function render(){
 
 let html="";
-
-let gWin=0,cWin=0,pWin=0;
-let gTotal=0,cTotal=0,pTotal=0;
+let gw=0,cw=0,pw=0;
+let gt=0,ct=0,pt=0;
 
 for(let i=0;i<data.length;i++){
 
-let r=data[i];
+let x=data[i];
 
-if(r.gemini!="ПРОПУСТИТИ"){
-gTotal++;
-if(r.gemini==r.real) gWin++;
+if(x.gemini!="ПРОПУСТИТИ"){
+gt++;
+if(x.gemini==x.real) gw++;
 }
 
-if(r.claude!="ПРОПУСТИТИ"){
-cTotal++;
-if(r.claude==r.real) cWin++;
+if(x.claude!="ПРОПУСТИТИ"){
+ct++;
+if(x.claude==x.real) cw++;
 }
 
-if(r.gpt!="ПРОПУСТИТИ"){
-pTotal++;
-if(r.gpt==r.real) pWin++;
+if(x.gpt!="ПРОПУСТИТИ"){
+pt++;
+if(x.gpt==x.real) pw++;
 }
 
 html+=`
 <tr>
 <td>${i+1}</td>
-<td>${r.date}</td>
-<td>${r.question}</td>
-<td class="${cls(r.gemini,r.real)}">${r.gemini}</td>
-<td class="${cls(r.claude,r.real)}">${r.claude}</td>
-<td class="${cls(r.gpt,r.real)}">${r.gpt}</td>
-<td>${r.real}</td>
+<td>${x.date}</td>
+<td>${x.question}</td>
+<td class="${cls(x.gemini,x.real)}">${x.gemini}</td>
+<td class="${cls(x.claude,x.real)}">${x.claude}</td>
+<td class="${cls(x.gpt,x.real)}">${x.gpt}</td>
+<td>${x.real}</td>
 <td><button class="del" onclick="delRow(${i})">X</button></td>
 </tr>
 `;
@@ -361,17 +410,17 @@ html+=`
 
 rows.innerHTML=html;
 
-let p1=gTotal?((gWin/gTotal)*100).toFixed(1):0;
-let p2=cTotal?((cWin/cTotal)*100).toFixed(1):0;
-let p3=pTotal?((pWin/pTotal)*100).toFixed(1):0;
+let p1=gt?((gw/gt)*100).toFixed(1):0;
+let p2=ct?((cw/ct)*100).toFixed(1):0;
+let p3=pt?((pw/pt)*100).toFixed(1):0;
 
 gemStat.innerText=p1+"%";
 claudeStat.innerText=p2+"%";
 gptStat.innerText=p3+"%";
 
-gemCount.innerText=gTotal+" угод";
-claudeCount.innerText=cTotal+" угод";
-gptCount.innerText=pTotal+" угод";
+gemCount.innerText=gt+" угод";
+claudeCount.innerText=ct+" угод";
+gptCount.innerText=pt+" угод";
 
 totalCount.innerText=data.length+" записів";
 
@@ -408,7 +457,6 @@ location.reload();
 }
 
 render();
-
 </script>
 
 </body>

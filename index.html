@@ -3,14 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>AI Compare </title>
+<title>AI COMPARE</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
 
 body{
 background:#071226;
-color:#fff;
+color:white;
 padding:25px;
 }
 
@@ -20,12 +25,13 @@ margin:auto;
 background:#0b1733;
 padding:30px;
 border-radius:24px;
+position:relative;
 }
 
 h1{
-font-size:56px;
+font-size:62px;
 font-weight:900;
-background:linear-gradient(90deg,#1af5a0,#3f8fff);
+background:linear-gradient(90deg,#18f7a0,#39a6ff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 margin-bottom:10px;
@@ -33,8 +39,21 @@ margin-bottom:10px;
 
 .sub{
 font-size:22px;
-color:#9bb8ff;
-margin-bottom:30px;
+color:#9db8ff;
+margin-bottom:28px;
+}
+
+.tgBtn{
+position:absolute;
+top:30px;
+right:30px;
+padding:18px 34px;
+border-radius:18px;
+background:linear-gradient(90deg,#4d8dff,#3a73ff);
+color:white;
+text-decoration:none;
+font-size:28px;
+font-weight:700;
 }
 
 .grid{
@@ -85,7 +104,7 @@ overflow:auto;
 
 table{
 width:100%;
-min-width:1200px;
+min-width:1250px;
 border-collapse:collapse;
 }
 
@@ -96,10 +115,24 @@ border-bottom:1px solid rgba(255,255,255,.08);
 font-size:18px;
 }
 
-th{color:#8ab8ff}
+th{
+color:#8ab8ff;
+}
 
-.ok{color:#19f7a0;font-weight:700}
-.bad{color:#ff5d70;font-weight:700}
+.ok{
+color:#19f7a0;
+font-weight:700;
+}
+
+.bad{
+color:#ff5d70;
+font-weight:700;
+}
+
+.skip{
+color:#9aa9d9;
+font-weight:700;
+}
 
 .stats{
 display:grid;
@@ -121,18 +154,19 @@ font-weight:900;
 margin-bottom:8px;
 }
 
-.green{color:#19f7a0}
-.blue{color:#44a4ff}
-.yellow{color:#ffd44d}
-.purple{color:#c971ff}
+.count{
+font-size:20px;
+color:#9bb6ec;
+margin-top:8px;
+}
 
-.small{font-size:24px}
+.green{color:#19f7a0;}
+.blue{color:#44a4ff;}
+.yellow{color:#ffd44d;}
+.purple{color:#c971ff;}
 
-.footer{
-margin-top:18px;
-text-align:center;
-color:#8da4d7;
-font-size:17px;
+.small{
+font-size:24px;
 }
 
 .del{
@@ -141,6 +175,13 @@ padding:8px 12px;
 border-radius:10px;
 font-size:14px;
 }
+
+.footer{
+margin-top:18px;
+text-align:center;
+color:#8da4d7;
+font-size:17px;
+}
 </style>
 </head>
 
@@ -148,24 +189,10 @@ font-size:14px;
 
 <div class="wrap">
 
-<h1>AI COMPARE </h1>
-<a href="https://t.me/+JxZLoij59XBmNTBi" target="_blank" class="tgBtn">Telegram</a>
-.tgBtn{
-position:absolute;
-top:30px;
-right:30px;
-padding:18px 34px;
-border-radius:18px;
-background:linear-gradient(90deg,#4d8dff,#3a73ff);
-color:white;
-text-decoration:none;
-font-size:28px;
-font-weight:700;
-}
+<h1>AI COMPARE</h1>
 
-.wrap{
-position:relative;
-}
+<a href="https://t.me/+JxZLoij59XBmNTBi" target="_blank" class="tgBtn">Telegram</a>
+
 <div class="sub">Порівняння точності Gemini / Claude / GPT-5</div>
 
 <div class="grid">
@@ -177,18 +204,21 @@ position:relative;
 <option value="">Gemini</option>
 <option>ВГОРУ</option>
 <option>ВНИЗ</option>
+<option>ПРОПУСТИТИ</option>
 </select>
 
 <select id="claude">
 <option value="">Claude</option>
 <option>ВГОРУ</option>
 <option>ВНИЗ</option>
+<option>ПРОПУСТИТИ</option>
 </select>
 
 <select id="gpt">
 <option value="">GPT-5</option>
 <option>ВГОРУ</option>
 <option>ВНИЗ</option>
+<option>ПРОПУСТИТИ</option>
 </select>
 
 <select id="real">
@@ -208,12 +238,12 @@ position:relative;
 <tr>
 <th>#</th>
 <th>Дата</th>
-<th>Питання</th>
+<th>Пара</th>
 <th>Gemini</th>
 <th>Claude</th>
 <th>GPT-5</th>
 <th>Факт</th>
-<th>Х</th>
+<th>X</th>
 </tr>
 </thead>
 <tbody id="rows"></tbody>
@@ -225,21 +255,25 @@ position:relative;
 <div class="card">
 <div class="big green" id="gemStat">0%</div>
 <div class="small">Gemini</div>
+<div class="count" id="gemCount">0 угод</div>
 </div>
 
 <div class="card">
 <div class="big blue" id="claudeStat">0%</div>
 <div class="small">Claude</div>
+<div class="count" id="claudeCount">0 угод</div>
 </div>
 
 <div class="card">
 <div class="big yellow" id="gptStat">0%</div>
 <div class="small">GPT-5</div>
+<div class="count" id="gptCount">0 угод</div>
 </div>
 
 <div class="card">
 <div class="big purple" id="winner">---</div>
 <div class="small">Найточніший AI</div>
+<div class="count" id="totalCount">0 записів</div>
 </div>
 
 </div>
@@ -252,7 +286,7 @@ position:relative;
 
 <script>
 
-let data = JSON.parse(localStorage.getItem("aiCompareV2") || "[]");
+let data = JSON.parse(localStorage.getItem("aiCompareV4") || "[]");
 
 function addRow(){
 
@@ -279,31 +313,46 @@ gpt.value="";
 real.value="";
 }
 
+function cls(v,real){
+if(v=="ПРОПУСТИТИ") return "skip";
+if(v==real) return "ok";
+return "bad";
+}
+
 function render(){
 
 let html="";
-let a=0,b=0,c=0;
+
+let gWin=0,cWin=0,pWin=0;
+let gTotal=0,cTotal=0,pTotal=0;
 
 for(let i=0;i<data.length;i++){
 
 let r=data[i];
 
-let x1=r.gemini==r.real;
-let x2=r.claude==r.real;
-let x3=r.gpt==r.real;
+if(r.gemini!="ПРОПУСТИТИ"){
+gTotal++;
+if(r.gemini==r.real) gWin++;
+}
 
-if(x1)a++;
-if(x2)b++;
-if(x3)c++;
+if(r.claude!="ПРОПУСТИТИ"){
+cTotal++;
+if(r.claude==r.real) cWin++;
+}
+
+if(r.gpt!="ПРОПУСТИТИ"){
+pTotal++;
+if(r.gpt==r.real) pWin++;
+}
 
 html+=`
 <tr>
 <td>${i+1}</td>
 <td>${r.date}</td>
 <td>${r.question}</td>
-<td class="${x1?'ok':'bad'}">${r.gemini}</td>
-<td class="${x2?'ok':'bad'}">${r.claude}</td>
-<td class="${x3?'ok':'bad'}">${r.gpt}</td>
+<td class="${cls(r.gemini,r.real)}">${r.gemini}</td>
+<td class="${cls(r.claude,r.real)}">${r.claude}</td>
+<td class="${cls(r.gpt,r.real)}">${r.gpt}</td>
 <td>${r.real}</td>
 <td><button class="del" onclick="delRow(${i})">X</button></td>
 </tr>
@@ -312,15 +361,19 @@ html+=`
 
 rows.innerHTML=html;
 
-let total=data.length||1;
-
-let p1=(a/total*100).toFixed(1);
-let p2=(b/total*100).toFixed(1);
-let p3=(c/total*100).toFixed(1);
+let p1=gTotal?((gWin/gTotal)*100).toFixed(1):0;
+let p2=cTotal?((cWin/cTotal)*100).toFixed(1):0;
+let p3=pTotal?((pWin/pTotal)*100).toFixed(1):0;
 
 gemStat.innerText=p1+"%";
 claudeStat.innerText=p2+"%";
 gptStat.innerText=p3+"%";
+
+gemCount.innerText=gTotal+" угод";
+claudeCount.innerText=cTotal+" угод";
+gptCount.innerText=pTotal+" угод";
+
+totalCount.innerText=data.length+" записів";
 
 let best="Немає";
 
@@ -344,12 +397,12 @@ render();
 }
 
 function save(){
-localStorage.setItem("aiCompareV2",JSON.stringify(data));
+localStorage.setItem("aiCompareV4",JSON.stringify(data));
 }
 
 function resetAll(){
 if(confirm("Очистити всі результати?")){
-localStorage.removeItem("aiCompareV2");
+localStorage.removeItem("aiCompareV4");
 location.reload();
 }
 }

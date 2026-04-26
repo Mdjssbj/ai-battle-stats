@@ -65,6 +65,16 @@ gap:16px;
 margin-bottom:25px;
 }
 
+.fieldLabel{
+color:#9db8ff;
+font-size:16px;
+margin-bottom:6px;
+}
+
+.fieldBox{
+width:100%;
+}
+
 input,select{
 width:100%;
 padding:18px;
@@ -76,45 +86,8 @@ background:#1e2d55;
 color:#fff;
 }
 
-/* ДАТА */
 input[type="date"]{
-width:100%;
-padding:18px;
-font-size:20px;
-border:none;
-outline:none;
-border-radius:16px;
-background:#1e2d55;
-color:transparent;
-position:relative;
-min-height:58px;
-cursor:pointer;
-}
-
-input[type="date"]::before{
-content:"📅 Обрати дату";
-color:#9db8ff;
-position:absolute;
-left:18px;
-top:50%;
-transform:translateY(-50%);
-pointer-events:none;
-font-size:18px;
-}
-
-input[type="date"]:valid{
 color:white;
-}
-
-input[type="date"]:valid::before{
-display:none;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator{
-filter:invert(1);
-cursor:pointer;
-position:absolute;
-right:16px;
 }
 
 button{
@@ -269,6 +242,10 @@ font-size:18px;
 font-size:16px;
 }
 
+.fieldLabel{
+font-size:14px;
+}
+
 }
 </style>
 </head>
@@ -285,36 +262,54 @@ font-size:16px;
 
 <div class="grid">
 
+<div class="fieldBox">
+<div class="fieldLabel">📅 Дата</div>
 <input id="date" type="date">
+</div>
 
-<input id="question" placeholder="Валютна пара">
+<div class="fieldBox">
+<div class="fieldLabel">💱 Валютна пара</div>
+<input id="question" placeholder="EUR/USD">
+</div>
 
+<div class="fieldBox">
+<div class="fieldLabel">Gemini</div>
 <select id="gemini">
-<option value="">Gemini</option>
+<option value="">Обрати</option>
 <option>ВГОРУ</option>
 <option>ВНИЗ</option>
 <option>ПРОПУСТИТИ</option>
 </select>
+</div>
 
+<div class="fieldBox">
+<div class="fieldLabel">Claude</div>
 <select id="claude">
-<option value="">Claude</option>
+<option value="">Обрати</option>
 <option>ВГОРУ</option>
 <option>ВНИЗ</option>
 <option>ПРОПУСТИТИ</option>
 </select>
+</div>
 
+<div class="fieldBox">
+<div class="fieldLabel">GPT-5</div>
 <select id="gpt">
-<option value="">GPT-5</option>
+<option value="">Обрати</option>
 <option>ВГОРУ</option>
 <option>ВНИЗ</option>
 <option>ПРОПУСТИТИ</option>
 </select>
+</div>
 
+<div class="fieldBox">
+<div class="fieldLabel">Факт</div>
 <select id="real">
-<option value="">Факт</option>
+<option value="">Обрати</option>
 <option>ВГОРУ</option>
 <option>ВНИЗ</option>
 </select>
+</div>
 
 <button class="main" onclick="addRow()">Додати</button>
 <button class="gray" onclick="resetAll()">Очистити</button>
@@ -374,7 +369,7 @@ font-size:16px;
 </div>
 
 <script>
-let data = JSON.parse(localStorage.getItem("aiCompareV4") || "[]");
+let data = JSON.parse(localStorage.getItem("aiCompareV6") || "[]");
 
 function addRow(){
 
@@ -483,12 +478,12 @@ render();
 }
 
 function save(){
-localStorage.setItem("aiCompareV4",JSON.stringify(data));
+localStorage.setItem("aiCompareV6",JSON.stringify(data));
 }
 
 function resetAll(){
 if(confirm("Очистити всі результати?")){
-localStorage.removeItem("aiCompareV4");
+localStorage.removeItem("aiCompareV6");
 location.reload();
 }
 }
